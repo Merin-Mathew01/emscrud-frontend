@@ -9,6 +9,16 @@ h1{
     margin-bottom: 20px;
 }
 
+kendo-textbox{
+    width: 350px;
+    border: 1px solid;
+    display: block;
+    margin: auto;
+    margin-bottom: 40px;
+    color: black;
+    padding: 5px;
+}
+
 .form-container{
     width: 400px;
     margin-top: 20px;

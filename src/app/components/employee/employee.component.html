@@ -1,5 +1,6 @@
 <div class="container">
     <h1>Employee Management System</h1>
+    <kendo-textbox (input)="search($event)" placeholder="Search by Employee Name or department"></kendo-textbox>
     <div class="form-container">
         <h2>{{editId?'Update Employee':'Add Employee'}}</h2>
         <form [formGroup]="employeeForm" (ngSubmit)="saveEmployee()">

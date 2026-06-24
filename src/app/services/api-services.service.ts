@@ -29,5 +29,9 @@ export class ApiServicesService {
     return this.http.put(`${this.server_url}/employee/${id}`,body)
   }
 
+  searchEmployeeAPI(searchText:string){
+    return this.http.get(`${this.server_url}/employees?search=${searchText}`)
+  }
+
 
 }

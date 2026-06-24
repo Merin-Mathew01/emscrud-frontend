@@ -1,11 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 import { ApiServicesService } from '../../services/api-services.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {  KENDO_TEXTBOX } from '@progress/kendo-angular-inputs';
+import {  debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-employee',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,KENDO_TEXTBOX],
   templateUrl: './employee.component.html',
   styleUrl: './employee.component.css'
 })
@@ -15,6 +17,7 @@ export class EmployeeComponent {
   employees = signal<any[]>([])
   employeeForm: FormGroup
   editId: any = null
+  searchText = new Subject<string>()
 
   constructor() {
     this.employeeForm = this.fb.group({
@@ -28,6 +31,7 @@ export class EmployeeComponent {
 
   ngOnInit() {
     this.getAllEmployees()
+    this.searchEmployee()
   }
 
   getAllEmployees() {
@@ -40,6 +44,18 @@ export class EmployeeComponent {
         console.log(reason);
       }
     })
+  }
+
+  searchEmployee(){
+    this.searchText.pipe(debounceTime(500)).subscribe((value)=>{
+      this.api.searchEmployeeAPI(value).subscribe((res:any)=>{
+        this.employees.set(res)
+      })
+    })
+  }
+
+  search(event:any){
+    this.searchText.next(event.target.value)
   }
 
   addEmployee() {
@@ -93,8 +109,6 @@ export class EmployeeComponent {
       }
     })
   }
-
-
 
   deleteEmployee(id: any) {
     this.api.removeEmployeeAPI(id).subscribe(() => {
