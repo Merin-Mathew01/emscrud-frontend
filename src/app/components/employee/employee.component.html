@@ -1,6 +1,7 @@
 <div class="container">
     <h1>Employee Management System</h1>
-    <kendo-textbox (input)="search($event)" placeholder="Search by Employee Name or department"></kendo-textbox>
+
+    <!-- Reactive form for both add and update -->
     <div class="form-container">
         <h2>{{editId?'Update Employee':'Add Employee'}}</h2>
         <form [formGroup]="employeeForm" (ngSubmit)="saveEmployee()">
@@ -31,8 +32,8 @@
         </form>
     </div>
 
-    
-    <table>
+    <!-- displaying datas using @for in tables -->
+    <!-- <table>
         <thead>
             <tr>
                 <th>ID</th>
@@ -58,5 +59,23 @@
                 </tr>
             }
         </tbody>
-    </table>
+    </table> -->
+
+    <div class="card">
+        <kendo-textbox (input)="search($event)" rounded="full" placeholder="Search by Employee Name or department"></kendo-textbox>
+
+        <h1>Employee List</h1>
+        <kendo-grid [sortable]="true" filterable="menu" [pageable]="true" [pageSize]="pageSize" [skip]="skip" (pageChange)="pageChange($event)" [data]="gridData()" [height]="570">
+            <kendo-grid-column field="id" [filterable]="false" title="ID" [width]="80"></kendo-grid-column>
+            <kendo-grid-column field="name" [filterable]="false" title="Employee Name" [width]="150"></kendo-grid-column>
+            <kendo-grid-column field="designation" filterVariant="multiCheckbox"  title="Designation" [width]="150"></kendo-grid-column>
+            <kendo-grid-column field="department" filterVariant="multiCheckbox" title="Department" [width]="150"></kendo-grid-column>
+            <kendo-grid-column field="salary" filterVariant="multiCheckbox" filter="numeric"  title="Salary" [width]="100"></kendo-grid-column>
+            <kendo-grid-column   title="Action" [width]="200"><ng-template kendoGridCellTemplate let-dataItem>
+                <button kendoButton id="update" (click)="getEmployeeDetails(dataItem.id)">Update</button>
+                <button kendoButton id="delete" (click)="deleteEmployee(dataItem.id)">Delete</button>
+            </ng-template></kendo-grid-column>
+        </kendo-grid>
+    </div>
+    
 </div>
