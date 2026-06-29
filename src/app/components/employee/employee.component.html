@@ -62,10 +62,10 @@
     </table> -->
 
     <div class="card">
-        <kendo-textbox (input)="search($event)" rounded="full" placeholder="Search by Employee Name or department"></kendo-textbox>
+        <kendo-textbox (input)="search($event)" rounded="full" placeholder="Search by Employee Name "></kendo-textbox>
 
         <h1>Employee List</h1>
-        <kendo-grid [sortable]="true" filterable="menu" [pageable]="true" [pageSize]="pageSize" [skip]="skip" (pageChange)="pageChange($event)" [data]="gridData()" [height]="570">
+        <kendo-grid [sortable]="true" filterable="menu" [pageable]="true" [pageSize]="pageSize" [skip]="skip" (pageChange)="pageChange($event)" [data]="gridData()" [height]="750">
             <kendo-grid-column field="id" [filterable]="false" title="ID" [width]="80"></kendo-grid-column>
             <kendo-grid-column field="name" [filterable]="false" title="Employee Name" [width]="150"></kendo-grid-column>
             <kendo-grid-column field="designation" filterVariant="multiCheckbox"  title="Designation" [width]="150"></kendo-grid-column>
