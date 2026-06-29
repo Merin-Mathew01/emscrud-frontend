@@ -62,6 +62,9 @@
     </table> -->
 
     <div class="card">
+        <button id="add" (click)="fileInput.click()">Import Excel File </button>
+        <input (change)="onFileSelected($event)" #fileInput type="file" accept=".xlsx,.xls" hidden>
+        
         <kendo-textbox (input)="search($event)" rounded="full" placeholder="Search by Employee Name "></kendo-textbox>
 
         <h1>Employee List</h1>

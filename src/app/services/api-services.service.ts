@@ -40,5 +40,10 @@ export class ApiServicesService {
   //   return this.http.get(`${this.server_url}/employees`)
   // }
 
+  // api to send excel data to backend
+  importEmployees(data:any[]){
+    return this.http.post(`${this.server_url}/importEmployee`,data)
+  }
+
 
 }

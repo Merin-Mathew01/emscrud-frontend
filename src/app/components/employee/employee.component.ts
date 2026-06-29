@@ -6,6 +6,7 @@ import { GridDataResult, KENDO_GRID } from "@progress/kendo-angular-grid";
 import { debounceTime, Subject } from 'rxjs';
 import { PageChangeEvent } from '@progress/kendo-angular-pager';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
+import * as XLSX from 'xlsx'
 
 @Component({
   selector: 'app-employee',
@@ -28,6 +29,7 @@ export class EmployeeComponent {
     data: [],
     total: 0
   })
+  excelData:any[] = []
 
   constructor() {
     this.employeeForm = this.fb.group({
@@ -168,5 +170,33 @@ export class EmployeeComponent {
     this.loadEmployees()
   }
 
+  // fn to read file and convert to json
+  onFileSelected(event:any){
+    const file = event.target.files[0]
+    if(file){
+      const reader = new FileReader()
+      reader.onload = (e:any)=>{
+        const arrayBuffer = e.target?.result
+        const workbook = XLSX.read(arrayBuffer,{
+          type:'array'
+        })
+        const sheetName = workbook.SheetNames[0]
+        const worksheet = workbook.Sheets[sheetName]
+        this.excelData = XLSX.utils.sheet_to_json(worksheet)
+
+        this.api.importEmployees(this.excelData).subscribe({
+          next:()=>{
+            alert("Import Successfull...")
+            this.loadEmployees()
+          },
+          error:(reason)=>{
+            console.log(reason);
+          }
+        })
+      }
+      reader.readAsArrayBuffer(file)
+      
+    }
+  }
 
 }
