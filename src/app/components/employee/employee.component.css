@@ -56,7 +56,7 @@ input{
     color: white;
 }
 
-table{
+/* table{
     margin: auto;
     margin-top: 50px;
     width: 800px;
@@ -74,7 +74,7 @@ th{
 td{
     border:1px solid rgba(34, 33, 33, 0.582);
     padding: 12px;
-}
+} */
 button{
     padding: 5px;
     border: none;
@@ -95,5 +95,23 @@ button{
 
 .card{
     padding: 100px;
+}
+
+#imp{
+    background-color: yellow;
+    color: black;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+#pdf{
+    background-color: palevioletred;
+    color: white;
+    margin-right: 20px;
+}
+
+#excel{
+    background-color: cadetblue;
+    color: white;
 }
 

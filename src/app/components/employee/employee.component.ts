@@ -1,8 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { ApiServicesService } from '../../services/api-services.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { KENDO_TEXTBOX } from '@progress/kendo-angular-inputs';
-import { GridDataResult, KENDO_GRID } from "@progress/kendo-angular-grid";
+import { GridComponent, GridDataResult, KENDO_GRID,KENDO_GRID_EXCEL_EXPORT, KENDO_GRID_PDF_EXPORT } from "@progress/kendo-angular-grid";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { debounceTime, Subject } from 'rxjs';
 import { PageChangeEvent } from '@progress/kendo-angular-pager';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
@@ -11,14 +12,16 @@ import * as XLSX from 'xlsx'
 @Component({
   selector: 'app-employee',
   standalone: true,
-  imports: [ReactiveFormsModule, KENDO_TEXTBOX, KENDO_GRID, ButtonsModule],
+  imports: [ReactiveFormsModule, KENDO_TEXTBOX, KENDO_GRID, ButtonsModule,KENDO_GRID_EXCEL_EXPORT,KENDO_GRID_PDF_EXPORT],
   templateUrl: './employee.component.html',
   styleUrl: './employee.component.css'
 })
 export class EmployeeComponent {
+  @ViewChild('grid')
+  grid!:GridComponent
   fb = inject(FormBuilder)
   api = inject(ApiServicesService)
-  // employees = signal<any[]>([])
+  employees = signal<any[]>([])
   employeeForm: FormGroup
   editId: any = null
   searchText = new Subject<string>()
@@ -56,6 +59,7 @@ export class EmployeeComponent {
 
     // loads employee list initially
     this.loadEmployees()
+    this.exportData()
   }
 
   // get all emplyees for displaying in table
@@ -199,4 +203,32 @@ export class EmployeeComponent {
     }
   }
 
+  // fn to export data
+  exportData(){
+    this.api.exportEmployeeData().subscribe({
+      next:(res:any)=>{
+        this.employees.set(res)
+      },
+      error:(err)=>{
+        console.log(err);
+      }
+    })
+  }
+
+  allData = ():ExcelExportData =>{
+    return {data:this.employees()}
+  }
+
+  // FN TO EXPORT TO PDF
+  exportPDF(){
+    const currentGridData = this.gridData()
+    this.gridData.set({
+      data:this.employees(),
+      total:this.employees().length
+    })
+    setTimeout(()=>{
+      this.grid.saveAsPDF()
+      this.gridData.set(currentGridData)
+    })
+  }
 }

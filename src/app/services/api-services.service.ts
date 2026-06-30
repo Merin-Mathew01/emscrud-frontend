@@ -45,5 +45,10 @@ export class ApiServicesService {
     return this.http.post(`${this.server_url}/importEmployee`,data)
   }
 
+  // api to get export data
+  exportEmployeeData(){
+    return this.http.get(`${this.server_url}/employees/export`)
+  }
+
 
 }

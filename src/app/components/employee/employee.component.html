@@ -7,7 +7,7 @@
         <form [formGroup]="employeeForm" (ngSubmit)="saveEmployee()">
             <div class="form-group">
                 <label>ID:</label>
-                <input  formControlName="id" id="idEmp" type="text" placeholder="Enter your ID">
+                <input formControlName="id" id="idEmp" type="text" placeholder="Enter your ID">
             </div>
             <div class="form-group">
                 <label>Name:</label>
@@ -26,7 +26,7 @@
                 <input class="grp" formControlName="salary" type="text" placeholder="Enter your Salary">
             </div>
             <div class="form-group">
-                
+
                 <button type="submit" id="add">{{editId?'Update':'Add'}}</button>
             </div>
         </form>
@@ -62,23 +62,44 @@
     </table> -->
 
     <div class="card">
-        <button id="add" (click)="fileInput.click()">Import Excel File </button>
-        <input (change)="onFileSelected($event)" #fileInput type="file" accept=".xlsx,.xls" hidden>
-        
         <kendo-textbox (input)="search($event)" rounded="full" placeholder="Search by Employee Name "></kendo-textbox>
 
         <h1>Employee List</h1>
-        <kendo-grid [sortable]="true" filterable="menu" [pageable]="true" [pageSize]="pageSize" [skip]="skip" (pageChange)="pageChange($event)" [data]="gridData()" [height]="750">
+        <!-- btn to import excel file -->
+        <button id="imp" kendoButton (click)="fileInput.click()">Import Excel File </button>
+        <input (change)="onFileSelected($event)" #fileInput type="file" accept=".xlsx,.xls" hidden>
+        <!-- kendo grid display -->
+        <kendo-grid #grid [sortable]="true" filterable="menu" [pageable]="true" [pageSize]="pageSize" [skip]="skip"
+            (pageChange)="pageChange($event)" [data]="gridData()" [height]="800">
+            
+            <ng-template kendoGridToolbarTemplate>
+                <!-- btn to export to pdf -->
+                <button id="pdf" type="button" kendoButton  (click)="exportPDF()">
+                    Export to PDF
+                </button>
+                <!-- btn to export to Excel -->
+                <button id="excel" type="button"  kendoGridExcelCommand>
+                    Export to Excel
+                </button>
+            </ng-template>
+            
             <kendo-grid-column field="id" [filterable]="false" title="ID" [width]="80"></kendo-grid-column>
-            <kendo-grid-column field="name" [filterable]="false" title="Employee Name" [width]="150"></kendo-grid-column>
-            <kendo-grid-column field="designation" filterVariant="multiCheckbox"  title="Designation" [width]="150"></kendo-grid-column>
-            <kendo-grid-column field="department" filterVariant="multiCheckbox" title="Department" [width]="150"></kendo-grid-column>
-            <kendo-grid-column field="salary" filterVariant="multiCheckbox" filter="numeric"  title="Salary" [width]="100"></kendo-grid-column>
-            <kendo-grid-column   title="Action" [width]="200"><ng-template kendoGridCellTemplate let-dataItem>
-                <button kendoButton id="update" (click)="getEmployeeDetails(dataItem.id)">Update</button>
-                <button kendoButton id="delete" (click)="deleteEmployee(dataItem.id)">Delete</button>
-            </ng-template></kendo-grid-column>
+            <kendo-grid-column field="name" [filterable]="false" title="Employee Name"
+                [width]="150"></kendo-grid-column>
+            <kendo-grid-column field="designation" filterVariant="multiCheckbox" title="Designation"
+                [width]="150"></kendo-grid-column>
+            <kendo-grid-column field="department" filterVariant="multiCheckbox" title="Department"
+                [width]="150"></kendo-grid-column>
+            <kendo-grid-column field="salary" filterVariant="multiCheckbox" filter="numeric" title="Salary"
+                [width]="100"></kendo-grid-column>
+            <kendo-grid-column title="Action" [width]="200"><ng-template kendoGridCellTemplate let-dataItem>
+                    <button kendoButton id="update" (click)="getEmployeeDetails(dataItem.id)">Update</button>
+                    <button kendoButton id="delete" (click)="deleteEmployee(dataItem.id)">Delete</button>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-excel fileName="employees.xlsx" [fetchData]="allData"></kendo-grid-excel>
+            <kendo-grid-pdf fileName="employees.pdf" [delay]="1000" [allPages]="true" paperSize="A4"  [landscape]="true" ></kendo-grid-pdf>
         </kendo-grid>
     </div>
-    
+
 </div>
