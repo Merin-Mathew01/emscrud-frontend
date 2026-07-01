@@ -241,16 +241,17 @@ export class EmployeeComponent {
     let color;
 
     if (status == "Pending") {
-      color = "yellow"
+      color = "#d6bc2a"
     } else if (status == "Completed") {
       color = "green"
     } else if (status == "Due"){
-      color = "orange"
-    }else if(status == "Cancelled"){
+      color = "#E65100"
+    }else if (status == "Cancelled"){
       color = "red"
     }else{
-      color = ""
+      color=""
     }
+
 
     return color;
   }
