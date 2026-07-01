@@ -65,41 +65,56 @@
         <kendo-textbox (input)="search($event)" rounded="full" placeholder="Search by Employee Name "></kendo-textbox>
 
         <h1>Employee List</h1>
-        <!-- btn to import excel file -->
-        <button id="imp" kendoButton (click)="fileInput.click()">Import Excel File </button>
-        <input (change)="onFileSelected($event)" #fileInput type="file" accept=".xlsx,.xls" hidden>
-        <!-- kendo grid display -->
+
+        <!-- kendo grid display with server side integretion-->
         <kendo-grid #grid [sortable]="true" filterable="menu" [pageable]="true" [pageSize]="pageSize" [skip]="skip"
-            (pageChange)="pageChange($event)" [data]="gridData()" [height]="800">
-            
+            (pageChange)="pageChange($event)" [data]="gridData()" [height]="850">
+
             <ng-template kendoGridToolbarTemplate>
+                <!-- btn to import excel file -->
+                <button id="imp" kendoButton (click)="fileInput.click()">Import Excel File </button>
+                <input (change)="onFileSelected($event)" #fileInput type="file" accept=".xlsx,.xls" hidden>
                 <!-- btn to export to pdf -->
-                <button id="pdf" type="button" kendoButton  (click)="exportPDF()">
+                <button id="pdf" type="button" kendoButton (click)="exportPDF()" [svgIcon]="filePdfIcon">
                     Export to PDF
                 </button>
                 <!-- btn to export to Excel -->
-                <button id="excel" type="button"  kendoGridExcelCommand>
+                <button id="excel" type="button" kendoGridExcelCommand [svgIcon]="fileExcelIcon">
                     Export to Excel
                 </button>
             </ng-template>
-            
-            <kendo-grid-column field="id" [filterable]="false" title="ID" [width]="80"></kendo-grid-column>
-            <kendo-grid-column field="name" [filterable]="false" title="Employee Name"
-                [width]="150"></kendo-grid-column>
-            <kendo-grid-column field="designation" filterVariant="multiCheckbox" title="Designation"
-                [width]="150"></kendo-grid-column>
-            <kendo-grid-column field="department" filterVariant="multiCheckbox" title="Department"
-                [width]="150"></kendo-grid-column>
-            <kendo-grid-column field="salary" filterVariant="multiCheckbox" filter="numeric" title="Salary"
-                [width]="100"></kendo-grid-column>
-            <kendo-grid-column title="Action" [width]="200"><ng-template kendoGridCellTemplate let-dataItem>
+
+            <kendo-grid-column [headerStyle]="{ 'background-color': '#666' ,'color':'white'}" field="id"
+                [filterable]="false" title="ID" [width]="80"></kendo-grid-column>
+            <kendo-grid-column [headerStyle]="{ 'background-color': '#666' ,'color':'white'}" field="name"
+                [filterable]="false" title="Employee Name" [width]="100"></kendo-grid-column>
+            <kendo-grid-column [headerStyle]="{ 'background-color': '#666' ,'color':'white'}" field="designation"
+                filterVariant="multiCheckbox" title="Designation" [width]="100"></kendo-grid-column>
+            <kendo-grid-column [headerStyle]="{ 'background-color': '#666' ,'color':'white'}" field="department"
+                filterVariant="multiCheckbox" title="Department" [width]="100"></kendo-grid-column>
+            <kendo-grid-column [headerStyle]="{ 'background-color': '#666' ,'color':'white'}" field="salary"
+                filterVariant="multiCheckbox" filter="numeric" title="Salary" [width]="100"></kendo-grid-column>
+            <kendo-grid-column [headerStyle]="{ 'background-color': '#666' ,'color':'white'}" field="status"
+                filterVariant="multiCheckbox" filter="numeric" title="Status" [width]="100">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <span class="whole-cell" [style.backgroundColor]="statusColor(dataItem.status)">
+                        {{ dataItem.status }}
+                    </span>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerStyle]="{ 'background-color': '#666' ,'color':'white'}" title="Action"
+                [width]="200"><ng-template kendoGridCellTemplate let-dataItem>
                     <button kendoButton id="update" (click)="getEmployeeDetails(dataItem.id)">Update</button>
                     <button kendoButton id="delete" (click)="deleteEmployee(dataItem.id)">Delete</button>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-excel fileName="employees.xlsx" [fetchData]="allData"></kendo-grid-excel>
-            <kendo-grid-pdf fileName="employees.pdf" [delay]="1000" [allPages]="true" paperSize="A4"  [landscape]="true" ></kendo-grid-pdf>
+            <kendo-grid-pdf fileName="employees.pdf" [delay]="1000" [allPages]="true" paperSize="A4"
+                [landscape]="true"></kendo-grid-pdf>
         </kendo-grid>
+
+        
+        <app-edit-grid></app-edit-grid>
     </div>
 
 </div>

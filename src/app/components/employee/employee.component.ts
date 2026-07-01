@@ -8,11 +8,13 @@ import { debounceTime, Subject } from 'rxjs';
 import { PageChangeEvent } from '@progress/kendo-angular-pager';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import * as XLSX from 'xlsx'
+import { EditGridComponent } from '../edit-grid/edit-grid.component';
+import { SVGIcon ,fileExcelIcon,filePdfIcon} from '@progress/kendo-svg-icons';
 
 @Component({
   selector: 'app-employee',
   standalone: true,
-  imports: [ReactiveFormsModule, KENDO_TEXTBOX, KENDO_GRID, ButtonsModule,KENDO_GRID_EXCEL_EXPORT,KENDO_GRID_PDF_EXPORT],
+  imports: [ReactiveFormsModule, KENDO_TEXTBOX, KENDO_GRID, ButtonsModule,KENDO_GRID_EXCEL_EXPORT,KENDO_GRID_PDF_EXPORT,EditGridComponent],
   templateUrl: './employee.component.html',
   styleUrl: './employee.component.css'
 })
@@ -33,6 +35,8 @@ export class EmployeeComponent {
     total: 0
   })
   excelData:any[] = []
+  filePdfIcon: SVGIcon = filePdfIcon;
+  fileExcelIcon: SVGIcon = fileExcelIcon;
 
   constructor() {
     this.employeeForm = this.fb.group({
@@ -230,5 +234,24 @@ export class EmployeeComponent {
       this.grid.saveAsPDF()
       this.gridData.set(currentGridData)
     })
+  }
+
+  // fn for changing the color of the status
+  statusColor(status:string){
+    let color;
+
+    if (status == "Pending") {
+      color = "yellow"
+    } else if (status == "Completed") {
+      color = "green"
+    } else if (status == "Due"){
+      color = "orange"
+    }else if(status == "Cancelled"){
+      color = "red"
+    }else{
+      color = ""
+    }
+
+    return color;
   }
 }

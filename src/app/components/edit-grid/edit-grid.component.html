@@ -1,0 +1,52 @@
+<!-- kendo grid with client side features -->
+<h1>Employee List using Client side Features</h1>
+<kendo-grid [kendoGridReactiveEditing]="createFormGroup" [kendoGridBinding]="employees()" [pageable]="true"
+    [pageSize]="10" [sortable]="true" filterable="menu" [height]="830">
+    <ng-template kendoGridToolbarTemplate>
+        <button id="add" kendoGridAddCommand>Add new</button>
+        <button kendoGridPDFCommand id="pdf" [svgIcon]="filePdfIcon"> Export to PDF</button>
+        <button id="excel" type="button" kendoGridExcelCommand [svgIcon]="fileExcelIcon">Export to Excel</button>
+    </ng-template>
+
+    <kendo-grid-column [filterable]="false" editor="numeric"
+        [headerStyle]="{ 'background-color': '#666' ,'color':'white'}" field="id" title="ID"
+        [width]="80"></kendo-grid-column>
+    <kendo-grid-column [filterable]="false" editor="text" [headerStyle]="{ 'background-color': '#666' ,'color':'white'}"
+        field="name" title="Name" [width]="100"></kendo-grid-column>
+    <kendo-grid-column filterVariant="multiCheckbox" editor="text"
+        [headerStyle]="{ 'background-color': '#666' ,'color':'white'}" field="designation" title="Designation"
+        [width]="100"></kendo-grid-column>
+    <kendo-grid-column filterVariant="multiCheckbox" editor="text"
+        [headerStyle]="{ 'background-color': '#666' ,'color':'white'}" field="department" title="Department"
+        [width]="100"></kendo-grid-column>
+    <kendo-grid-column filterVariant="multiCheckbox" [filterable]="false" editor="numeric"
+        [headerStyle]="{ 'background-color': '#666' ,'color':'white'}" field="salary" title="Salary"
+        [width]="100"></kendo-grid-column>
+    <kendo-grid-column filterVariant="multiCheckbox" editor="text"
+        [headerStyle]="{ 'background-color': '#666' ,'color':'white'}" field="status" title="Status" [width]="100">
+        <ng-template kendoGridCellTemplate let-dataItem >
+            <span class="whole-cell" [style.backgroundColor]="statusColor(dataItem.status)" >
+                {{ dataItem.status }}
+            </span>
+        </ng-template>
+        <!-- edit mode
+         <ng-template kendoGridEditTemplate let-formGroup >
+            <kendo-dropdownlist [data]="statusList"  formControlName="status"></kendo-dropdownlist>
+        </ng-template> -->
+    </kendo-grid-column>
+    <kendo-grid-excel fileName="employees.xlsx" [fetchData]="allData"></kendo-grid-excel>
+    <kendo-grid-pdf fileName="employees.pdf" [delay]="1000" [allPages]="true" paperSize="A4"
+        [landscape]="true"></kendo-grid-pdf>
+    <kendo-grid-command-column [width]="220">
+        <ng-template kendoGridCellTemplate let-isNew="isNew">
+            <button id="update" kendoGridEditCommand themeColor="primary">Edit</button>
+            <button id="delete" kendoGridRemoveCommand>Remove</button>
+            <button id="update" kendoGridSaveCommand>
+                {{ isNew ? "Add" : "Update" }}
+            </button>
+            <button id="delete" kendoGridCancelCommand>
+                {{ isNew ? "Discard changes" : "Cancel" }}
+            </button>
+        </ng-template>
+    </kendo-grid-command-column>
+</kendo-grid>
