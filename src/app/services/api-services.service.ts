@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 })
 export class ApiServicesService {
 
+  loginURL="http://10.15.51.152:5002/api/test"
   server_url = "http://localhost:3000"
   http = inject(HttpClient)
 
@@ -50,5 +51,9 @@ export class ApiServicesService {
     return this.http.get(`${this.server_url}/employees/export`)
   }
 
+  // login from other api
+  loginAPI(data:any){
+    return this.http.post(`${this.loginURL}`,data)
+  }
 
 }

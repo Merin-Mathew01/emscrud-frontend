@@ -1,6 +1,6 @@
 <!-- kendo grid with client side features -->
 <h1>Employee List using Client side Features</h1>
-<kendo-grid [kendoGridReactiveEditing]="createFormGroup" [kendoGridBinding]="employees()" [pageable]="true"
+<kendo-grid [kendoGridReactiveEditing]="createFormGroup" [kendoGridBinding]="employees()" [pageable]="true" (save)="saveHandler($event)"
     [pageSize]="10" [sortable]="true" filterable="menu" [height]="830">
     <ng-template kendoGridToolbarTemplate>
         <button id="add" kendoGridAddCommand>Add new</button>
@@ -22,17 +22,17 @@
     <kendo-grid-column filterVariant="multiCheckbox" [filterable]="false" editor="numeric"
         [headerStyle]="{ 'background-color': '#666' ,'color':'white'}" field="salary" title="Salary"
         [width]="100"></kendo-grid-column>
-    <kendo-grid-column filterVariant="multiCheckbox" editor="text"
+    <kendo-grid-column filterVariant="multiCheckbox" 
         [headerStyle]="{ 'background-color': '#666' ,'color':'white'}" field="status" title="Status" [width]="100">
         <ng-template kendoGridCellTemplate let-dataItem >
             <span class="whole-cell" [style.backgroundColor]="statusColor(dataItem.status)" >
                 {{ dataItem.status }}
             </span>
         </ng-template>
-        <!-- edit mode
-         <ng-template kendoGridEditTemplate let-formGroup >
-            <kendo-dropdownlist [data]="statusList"  formControlName="status"></kendo-dropdownlist>
-        </ng-template> -->
+        <!-- edit mode -->
+         <ng-template kendoGridEditTemplate let-formGroup="formGroup" >
+            <kendo-dropdownlist [data]="statusList" [valuePrimitive]="true"  formControlName="status"></kendo-dropdownlist>
+        </ng-template>
     </kendo-grid-column>
     <kendo-grid-excel fileName="employees.xlsx" [fetchData]="allData"></kendo-grid-excel>
     <kendo-grid-pdf fileName="employees.pdf" [delay]="1000" [allPages]="true" paperSize="A4"

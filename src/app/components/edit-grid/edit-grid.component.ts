@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { CreateFormGroupArgs, KENDO_GRID, KENDO_GRID_EXCEL_EXPORT, KENDO_GRID_PDF_EXPORT } from '@progress/kendo-angular-grid';
+import { CreateFormGroupArgs, KENDO_GRID, KENDO_GRID_EXCEL_EXPORT, KENDO_GRID_PDF_EXPORT,SaveEvent } from '@progress/kendo-angular-grid';
 import { ApiServicesService } from '../../services/api-services.service';
 import { ExcelExportData } from '@progress/kendo-angular-excel-export';
 import { fileExcelIcon,filePdfIcon, SVGIcon } from "@progress/kendo-svg-icons";
@@ -20,6 +20,8 @@ export class EditGridComponent {
   employees = signal<any[]>([])
   api=inject(ApiServicesService)
   fb = inject(FormBuilder)
+
+  statusList = ["Pending","Completed","Due","Cancelled"]
 
   createFormGroup = (args:CreateFormGroupArgs):FormGroup =>{
     const item = args.isNew ? {} : args.dataItem;
@@ -73,4 +75,10 @@ export class EditGridComponent {
   allData = ():ExcelExportData =>{
       return {data:this.employees()}
     }
+
+    public saveHandler(args:SaveEvent):void{
+    Object.assign(args.dataItem,args.formGroup.value)
+  }
 }
+
+
